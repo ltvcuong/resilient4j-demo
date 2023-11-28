@@ -21,6 +21,7 @@ public interface OrderServiceClient {
   @Produces(MediaType.APPLICATION_JSON)
   List<Order> businessError();
 
+//  @CircuitBreaker(name = OrderServiceClient.SERVICE)
   @GET
   @Path("/v1/orders/tech-error")
   @Produces(MediaType.APPLICATION_JSON)

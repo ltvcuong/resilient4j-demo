@@ -37,13 +37,12 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   private List<Customer> getResult(Supplier<List<Order>> orderSupplier) {
-    //        var circuitBreaker =
-    // circuitBreakerRegistry.circuitBreaker(OrderServiceClient.SERVICE);
-    //        Supplier<List<Order>> decoratedSupplier =
-    //            CircuitBreaker.decorateSupplier(circuitBreaker, orderSupplier);
+    var circuitBreaker = circuitBreakerRegistry.circuitBreaker(OrderServiceClient.SERVICE);
+    Supplier<List<Order>> decoratedSupplier =
+        CircuitBreaker.decorateSupplier(circuitBreaker, orderSupplier);
 
     List<Customer> customers = new ArrayList<>();
-    customers.add(new Customer("1", "John Doe", orderSupplier.get()));
+    customers.add(new Customer("1", "John Doe", decoratedSupplier.get()));
     return customers;
   }
 }

@@ -25,7 +25,7 @@ public class CircuitBreakerHealthEndpoint {
 
   @ReadOperation
   public List<CircuitBreakerHealth> getHealth() {
-    return circuitBreakerRegistry.getAllCircuitBreakers().stream()
+    return circuitBreakerRegistry.getAllCircuitBreakers()
         .map(e -> new CircuitBreakerHealth(e.getName(), e.getState().name(), e.getMetrics()))
         .collect(Collectors.toList());
   }
