@@ -15,11 +15,11 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class FeignErrorDecoderConfig {
   @Bean
-  public ErrorDecoder errorDecoder() {
-    return new ErrorDecoder();
+  public OrderErrorDecoder orderServiceErrorDecoder() {
+    return new OrderErrorDecoder();
   }
 
-  static class ErrorDecoder implements feign.codec.ErrorDecoder {
+  static class OrderErrorDecoder implements feign.codec.ErrorDecoder {
 
     @SneakyThrows
     @Override

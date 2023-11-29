@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * custom health endpoint: http://localhost:9080/actuator/circuit-breaker-health
+ */
 @Component
 @Endpoint(id = "circuit-breaker-health")
 public class CircuitBreakerHealthEndpoint {

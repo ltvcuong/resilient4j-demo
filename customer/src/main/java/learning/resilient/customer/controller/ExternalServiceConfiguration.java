@@ -18,7 +18,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ExternalServiceConfiguration {
-  @Autowired FeignErrorDecoderConfig.ErrorDecoder errorDecoder;
+  @Autowired
+  FeignErrorDecoderConfig.OrderErrorDecoder orderErrorDecoder;
 
   @Autowired CircuitBreakerRegistry circuitBreakerRegistry;
 
@@ -30,7 +31,7 @@ public class ExternalServiceConfiguration {
         .contract(new JAXRSContract())
         .decoder(new JacksonDecoder(new ObjectMapper()))
         .encoder(new JacksonEncoder(new ObjectMapper()))
-        .errorDecoder(errorDecoder)
+        .errorDecoder(orderErrorDecoder)
         .target(OrderServiceClient.class, url);
   }
 
@@ -46,7 +47,7 @@ public class ExternalServiceConfiguration {
         .decoder(new Decoder.Default())
         .decoder(new JacksonDecoder(new ObjectMapper()))
         .encoder(new JacksonEncoder(new ObjectMapper()))
-        .errorDecoder(errorDecoder)
+        .errorDecoder(orderErrorDecoder)
         .target(OrderServiceFeignClient.class, url);
   }
 }
