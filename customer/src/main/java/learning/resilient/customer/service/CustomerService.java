@@ -8,4 +8,6 @@ public interface CustomerService {
   List<Customer> businessError();
 
   List<Customer> technicalError();
+
+  List<Customer> slow();
 }

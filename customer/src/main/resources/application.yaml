@@ -29,13 +29,29 @@ resilience4j.circuitbreaker:
       waitDurationInOpenState: 5s
       failureRateThreshold: 50
       eventConsumerBufferSize: 10
-#      recordExceptions:
-#        - org.springframework.web.client.HttpServerErrorException
-#        - java.util.concurrent.TimeoutException
-#        - java.io.IOException
-#        - learning.resilient.customer.exception.TechnicalException
+      #      recordExceptions:
+      #        - org.springframework.web.client.HttpServerErrorException
+      #        - java.util.concurrent.TimeoutException
+      #        - java.io.IOException
+      #        - learning.resilient.customer.exception.TechnicalException
       ignoreExceptions:
         - learning.resilient.customer.exception.BusinessException
+        - io.github.resilience4j.bulkhead.BulkheadFullException
+  instances:
+    order:
+      baseConfig: default
+
+resilience4j.thread-pool-bulkhead:
+  configs:
+    default:
+      registerHealthIndicator: true
+      #      maxWaitDuration: 100ms
+      #      maxConcurrentCalls: 3
+      coreThreadPoolSize: 2
+      maxThreadPoolSize: 2
+      queueCapacity: 1
+      writableStackTraceEnabled: true
+
   instances:
     order:
       baseConfig: default

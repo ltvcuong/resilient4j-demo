@@ -34,4 +34,10 @@ public class CustomerController {
   public List<Customer> technicalError() {
     return customerService.technicalError();
   }
+
+  @GetMapping("/slow")
+  @Produces(MediaType.APPLICATION_JSON_VALUE)
+  public List<Customer> slow() {
+    return customerService.slow();
+  }
 }

@@ -35,4 +35,12 @@ public class OrderController {
   public List<Order> techError() {
     throw new RuntimeException();
   }
+
+  @GetMapping("/slow")
+  @Produces(MediaType.APPLICATION_JSON_VALUE)
+  public List<Order> slow() throws Exception {
+    Thread.sleep(10000);
+//    return new ArrayList<>();
+    throw new RuntimeException();
+  }
 }

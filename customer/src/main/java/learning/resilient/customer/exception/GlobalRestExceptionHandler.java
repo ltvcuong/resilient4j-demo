@@ -1,5 +1,7 @@
 package learning.resilient.customer.exception;
 
+import io.github.resilience4j.bulkhead.BulkheadFullException;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -32,5 +34,26 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
     var error =
         ErrorResponse.builder().code("business_exception").description("Some biz error").build();
     return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+  }
+
+  @ExceptionHandler({CallNotPermittedException.class})
+  public ResponseEntity<ErrorResponse> handleCallNotPermittedException(
+      CallNotPermittedException ex) {
+    var error =
+        ErrorResponse.builder()
+            .code("CallNotPermittedException")
+            .description("Some tech error")
+            .build();
+    return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @ExceptionHandler({BulkheadFullException.class})
+  public ResponseEntity<ErrorResponse> handleBulkheadFullException(BulkheadFullException ex) {
+    var error =
+        ErrorResponse.builder()
+            .code("BulkheadFullException")
+            .description("Some tech error")
+            .build();
+    return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
