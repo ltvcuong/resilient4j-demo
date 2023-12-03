@@ -36,7 +36,7 @@ resilience4j.circuitbreaker:
       #        - learning.resilient.customer.exception.TechnicalException
       ignoreExceptions:
         - learning.resilient.customer.exception.BusinessException
-        - io.github.resilience4j.bulkhead.BulkheadFullException
+#        - io.github.resilience4j.bulkhead.BulkheadFullException
   instances:
     order:
       baseConfig: default
@@ -48,8 +48,9 @@ resilience4j.thread-pool-bulkhead:
       #      maxWaitDuration: 100ms
       #      maxConcurrentCalls: 3
       coreThreadPoolSize: 2
-      maxThreadPoolSize: 2
+      maxThreadPoolSize: 3
       queueCapacity: 1
+      keepAliveDuration: 1000
       writableStackTraceEnabled: true
 
   instances:
