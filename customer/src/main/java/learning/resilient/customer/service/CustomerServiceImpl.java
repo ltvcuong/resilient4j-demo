@@ -13,7 +13,6 @@ import learning.resilient.customer.extservice.Order;
 import learning.resilient.customer.extservice.OrderServiceClient;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Data
@@ -30,9 +29,6 @@ public class CustomerServiceImpl implements CustomerService {
   private final BulkheadRegistry bulkheadRegistry;
 
   private final TimeLimiterRegistry timeLimiterRegistry;
-
-  @Value("${resilience4j.decorators.enabled:false}")
-  private String decoratorEnabled;
 
   @Override
   public List<Customer> success() {
