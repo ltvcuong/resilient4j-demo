@@ -30,7 +30,7 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 5
       automaticTransitionFromOpenToHalfOpenEnabled: true
       waitDurationInOpenState: 5s
-      failureRateThreshold: 50
+      failureRateThreshold: 100
       eventConsumerBufferSize: 200
       #      recordExceptions:
       #        - org.springframework.web.client.HttpServerErrorException
@@ -44,19 +44,6 @@ resilience4j.circuitbreaker:
     order:
       baseConfig: default
 
-resilience4j.thread-pool-bulkhead:
-  configs:
-    default:
-      registerHealthIndicator: true
-      coreThreadPoolSize: 2
-      maxThreadPoolSize: 3
-      queueCapacity: 1
-      keepAliveDuration: 1000
-      writableStackTraceEnabled: true
-  instances:
-    order-threadpool:
-      baseConfig: default
-
 resilience4j.bulkhead:
   configs:
     default:
@@ -66,14 +53,3 @@ resilience4j.bulkhead:
   instances:
     order:
       baseConfig: default
-
-resilience4j.timelimiter:
-  configs:
-    default:
-      cancelRunningFuture: true
-      timeoutDuration: 5s
-  instances:
-    order:
-      baseConfig: default
-
-resilience4j.decorators.enabled: false
