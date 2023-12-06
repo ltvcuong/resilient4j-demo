@@ -1,5 +1,8 @@
 server:
   port: 9080
+  tomcat:
+    max-threads: 4
+    min-spare-threads: 0
 
 management.endpoints.web.exposure.include: '*'
 management.endpoint.health.show-details: always
@@ -22,13 +25,13 @@ resilience4j.circuitbreaker:
   configs:
     default:
       registerHealthIndicator: true
-      slidingWindowSize: 5
+      slidingWindowSize: 20
       minimumNumberOfCalls: 5
-      permittedNumberOfCallsInHalfOpenState: 3
+      permittedNumberOfCallsInHalfOpenState: 5
       automaticTransitionFromOpenToHalfOpenEnabled: true
       waitDurationInOpenState: 5s
       failureRateThreshold: 50
-      eventConsumerBufferSize: 10
+      eventConsumerBufferSize: 200
       #      recordExceptions:
       #        - org.springframework.web.client.HttpServerErrorException
       #        - java.util.concurrent.TimeoutException
@@ -45,14 +48,32 @@ resilience4j.thread-pool-bulkhead:
   configs:
     default:
       registerHealthIndicator: true
-      #      maxWaitDuration: 100ms
-      #      maxConcurrentCalls: 3
       coreThreadPoolSize: 2
       maxThreadPoolSize: 3
       queueCapacity: 1
       keepAliveDuration: 1000
       writableStackTraceEnabled: true
+  instances:
+    order-threadpool:
+      baseConfig: default
 
+resilience4j.bulkhead:
+  configs:
+    default:
+      registerHealthIndicator: true
+      maxWaitDuration: 100ms
+      maxConcurrentCalls: 3
   instances:
     order:
       baseConfig: default
+
+resilience4j.timelimiter:
+  configs:
+    default:
+      cancelRunningFuture: true
+      timeoutDuration: 5s
+  instances:
+    order:
+      baseConfig: default
+
+resilience4j.decorators.enabled: false

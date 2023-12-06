@@ -10,4 +10,6 @@ public interface CustomerService {
   List<Customer> technicalError();
 
   List<Customer> slow();
+
+  List<Customer> resilentSlowWithAnnotation();
 }

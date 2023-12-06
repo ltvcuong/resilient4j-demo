@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.concurrent.TimeoutException;
+
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 @RestController
@@ -54,6 +56,16 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
             .code("BulkheadFullException")
             .description("Some tech error")
             .build();
+    return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @ExceptionHandler({TimeoutException.class})
+  public ResponseEntity<ErrorResponse> handleBulkheadFullException(TimeoutException ex) {
+    var error =
+            ErrorResponse.builder()
+                    .code("TimeoutException")
+                    .description("Some tech error")
+                    .build();
     return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

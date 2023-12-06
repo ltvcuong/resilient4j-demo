@@ -40,4 +40,10 @@ public class CustomerController {
   public List<Customer> slow() {
     return customerService.slow();
   }
+
+  @GetMapping("/slow/annotated")
+  @Produces(MediaType.APPLICATION_JSON_VALUE)
+  public List<Customer> slowWithAnnotation() {
+    return customerService.resilentSlowWithAnnotation();
+  }
 }

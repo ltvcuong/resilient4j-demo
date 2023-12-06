@@ -1,14 +1,8 @@
 package learning.resilient.customer.extservice;
 
 import feign.RequestLine;
-
 import java.util.List;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
-// @CircuitBreaker(name = OrderServiceClient.SERVICE)
 public interface OrderServiceFeignClient {
   String SERVICE = "order";
 
@@ -20,4 +14,7 @@ public interface OrderServiceFeignClient {
 
   @RequestLine("GET /v1/tech-error")
   List<Order> technicalError();
+
+  @RequestLine("GET /v1/slow")
+  List<Order> slow();
 }

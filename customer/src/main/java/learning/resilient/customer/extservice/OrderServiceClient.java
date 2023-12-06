@@ -8,8 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-//@CircuitBreaker(name = OrderServiceClient.SERVICE)
-//@Bulkhead(name = OrderServiceClient.SERVICE, type = Bulkhead.Type.THREADPOOL)
 public interface OrderServiceClient {
   String SERVICE = "order";
 
@@ -23,14 +21,22 @@ public interface OrderServiceClient {
   @Produces(MediaType.APPLICATION_JSON)
   List<Order> businessError();
 
-//  @CircuitBreaker(name = OrderServiceClient.SERVICE)
   @GET
   @Path("/v1/orders/tech-error")
   @Produces(MediaType.APPLICATION_JSON)
   List<Order> technicalError();
 
+//  @CircuitBreaker(name = OrderServiceClient.SERVICE)
+//  @Bulkhead(name = OrderServiceClient.SERVICE)
   @GET
   @Path("/v1/orders/slow")
   @Produces(MediaType.APPLICATION_JSON)
   List<Order> slow();
+
+  @CircuitBreaker(name = OrderServiceClient.SERVICE)
+  @Bulkhead(name = OrderServiceClient.SERVICE)
+  @GET
+  @Path("/v1/orders/slow")
+  @Produces(MediaType.APPLICATION_JSON)
+  List<Order> resilientSlowWithAnnotation();
 }
