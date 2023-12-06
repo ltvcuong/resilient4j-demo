@@ -45,6 +45,7 @@ public class ExternalServiceConfiguration {
         FeignDecorators.builder().withBulkhead(bulkhead).withCircuitBreaker(circuitBreaker).build();
     return Resilience4jFeign.builder(decorators)
         .decoder(new Decoder.Default())
+        .contract(new JAXRSContract())
         .decoder(new JacksonDecoder(new ObjectMapper()))
         .encoder(new JacksonEncoder(new ObjectMapper()))
         .errorDecoder(orderErrorDecoder)

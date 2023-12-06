@@ -1,20 +1,37 @@
 package learning.resilient.customer.extservice;
 
-import feign.RequestLine;
+
 import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 public interface OrderServiceFeignClient {
   String SERVICE = "order";
 
-  @RequestLine("GET /v1/success")
+  @GET
+  @Path("/v1/orders/success")
+  @Produces(MediaType.APPLICATION_JSON)
   List<Order> success();
 
-  @RequestLine("GET /v1/business-error")
+  @GET
+  @Path("/v1/orders/business-error")
+  @Produces(MediaType.APPLICATION_JSON)
   List<Order> businessError();
 
-  @RequestLine("GET /v1/tech-error")
+  @GET
+  @Path("/v1/orders/tech-error")
+  @Produces(MediaType.APPLICATION_JSON)
   List<Order> technicalError();
 
-  @RequestLine("GET /v1/slow")
+  @GET
+  @Path("/v1/orders/slow")
+  @Produces(MediaType.APPLICATION_JSON)
   List<Order> slow();
+
+  @GET
+  @Path("/v1/orders/slow")
+  @Produces(MediaType.APPLICATION_JSON)
+  List<Order> resilientSlowWithAnnotation();
 }
