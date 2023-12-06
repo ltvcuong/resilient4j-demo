@@ -12,7 +12,6 @@ import java.util.concurrent.*;
 import java.util.function.Supplier;
 import learning.resilient.customer.extservice.Order;
 import learning.resilient.customer.extservice.OrderServiceClient;
-import learning.resilient.customer.extservice.OrderServiceFeignClient;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,8 +23,6 @@ import org.springframework.stereotype.Service;
 public class CustomerServiceImpl implements CustomerService {
 
   private final OrderServiceClient orderService;
-  
-  private final OrderServiceFeignClient orderServiceFeignClient;
 
   private final CircuitBreakerRegistry circuitBreakerRegistry;
 
@@ -55,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public List<Customer> slow() {
-    return resilientCallOrderSvc(orderServiceFeignClient::slow);
+    return resilientCallOrderSvc(orderService::slow);
   }
 
   @Override
