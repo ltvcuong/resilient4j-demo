@@ -8,8 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@CircuitBreaker(name = OrderServiceClient.SERVICE)
-@Bulkhead(name = OrderServiceClient.SERVICE)
 public interface OrderServiceClient {
   String SERVICE = "order";
 

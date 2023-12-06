@@ -7,7 +7,6 @@ import io.github.resilience4j.decorators.Decorators;
 import io.github.resilience4j.timelimiter.TimeLimiterRegistry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.function.Supplier;
 import learning.resilient.customer.extservice.Order;
@@ -64,11 +63,6 @@ public class CustomerServiceImpl implements CustomerService {
 
   private List<Customer> resilientCallOrderSvc(Supplier<List<Order>> orderSupplier) {
     List<Customer> customers = new ArrayList<>();
-    System.out.println(">>>>>>>" + decoratorEnabled);
-    if (Objects.equals(decoratorEnabled, "false")) {
-      customers.add(new Customer("1", "John Doe", orderSupplier.get()));
-      return customers;
-    }
 
     var circuitBreaker = circuitBreakerRegistry.circuitBreaker(OrderServiceClient.SERVICE);
     var bulkhead = threadPoolBulkheadRegistry.bulkhead(OrderServiceClient.SERVICE);
@@ -88,38 +82,6 @@ public class CustomerServiceImpl implements CustomerService {
             })
         .toCompletableFuture()
         .join();
-
-    //    var decoratedCompletionStage = bulkhead.decorateSupplier(orderSupplier);
-    //    var cbDecordatedSupplier = CircuitBreaker.decorateSupplier(circuitBreaker,
-    // decoratedCompletionStage);
-    //    var finalCompletionStage =
-    //        timelimiter.decorateCompletionStage(
-    //            Executors.newScheduledThreadPool(3), decoratedCompletionStage);
-    //
-    //    cbDecordatedSupplier
-    //        .get()
-    //        .thenAccept(
-    //            orders -> {
-    //              customers.add(new Customer("1", "John Doe", orders));
-    //            })
-    //        .toCompletableFuture()
-    //        .join();
-    return customers;
-  }
-
-  private List<Customer> resilientCallOrderSvcThreadpool(Supplier<List<Order>> orderSupplier) {
-    var circuitBreaker = circuitBreakerRegistry.circuitBreaker(OrderServiceClient.SERVICE);
-    //    var timelimiter = timeLimiterRegistry.timeLimiter(OrderServiceClient.SERVICE);
-    var bulkhead = bulkheadRegistry.bulkhead(OrderServiceClient.SERVICE);
-
-    List<Customer> customers = new ArrayList<>();
-
-    var ordersSupplier =
-        Decorators.ofSupplier(orderSupplier)
-            .withBulkhead(bulkhead)
-            .withCircuitBreaker(circuitBreaker)
-            .decorate();
-    customers.add(new Customer("1", "John Doe", ordersSupplier.get()));
     return customers;
   }
 }
