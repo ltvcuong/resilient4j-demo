@@ -106,7 +106,7 @@ class CustomerControllerTest {
                     });
         }
 
-        Thread.sleep(10000);
+        Thread.sleep(6000);
         // CB now OPEN
         assertThat(
                 circuitBreakerRegistry.circuitBreaker("order").getState(),
