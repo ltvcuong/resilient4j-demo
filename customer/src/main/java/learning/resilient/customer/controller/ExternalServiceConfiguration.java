@@ -3,6 +3,7 @@ package learning.resilient.customer.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Feign;
 import feign.Request;
+import feign.Retryer;
 import feign.codec.Decoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
@@ -35,6 +36,7 @@ public class ExternalServiceConfiguration {
         .encoder(new JacksonEncoder(new ObjectMapper()))
         .errorDecoder(orderErrorDecoder)
         .logLevel(feign.Logger.Level.FULL)
+        .retryer(Retryer.NEVER_RETRY)
         .target(OrderServiceClient.class, url);
   }
 }
