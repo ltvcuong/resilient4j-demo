@@ -61,6 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
     return customers;
   }
 
+  // move to aop
   private List<Customer> resilientCallOrderSvc(Supplier<List<Order>> orderSupplier) {
     var circuitBreaker = circuitBreakerRegistry.circuitBreaker(OrderServiceClient.SERVICE);
     var bulkhead = bulkheadRegistry.bulkhead(OrderServiceClient.SERVICE);

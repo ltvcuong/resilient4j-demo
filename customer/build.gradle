@@ -22,9 +22,9 @@ dependencies {
     implementation 'io.github.resilience4j:resilience4j-all'
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'commons-io:commons-io:2.6'
-    implementation 'io.github.openfeign:feign-jackson:13.1'
+    implementation 'io.github.openfeign:feign-jackson:12.4'
     compileOnly 'org.projectlombok:lombok:1.18.30'
-    implementation 'io.github.openfeign:feign-jaxrs:13.1'
+    implementation 'io.github.openfeign:feign-jaxrs:12.4'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation('org.springframework.boot:spring-boot-starter-aop')
 

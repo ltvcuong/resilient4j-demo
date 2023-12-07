@@ -53,3 +53,5 @@ resilience4j.bulkhead:
   instances:
     order:
       baseConfig: default
+
+feign.client.config.default.loggerLevel: full

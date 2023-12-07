@@ -20,31 +20,11 @@ import org.springframework.context.annotation.Configuration;
 public class ResilientConfig {
   private final CircuitBreakerRegistry circuitBreakerRegistry;
 
-  private final ThreadPoolBulkheadRegistry bulkheadRegistry;
+//  private final ThreadPoolBulkheadRegistry bulkheadRegistry;
+//
+  private final BulkheadRegistry bulkheadRegistry;
 
   private final TimeLimiterRegistry timeLimiterRegistry;
-
-//    @Bean
-//    public BulkheadRegistry bulkheadRegistry() {
-//      BulkheadConfig bulkheadConfig = BulkheadConfig.custom()
-//              .maxConcurrentCalls(3)
-//              .maxWaitDuration(Duration.ofMillis(500))
-//              .build();
-//
-//      return BulkheadRegistry.of(bulkheadConfig);
-//    }
-//
-//  @Bean
-//  public ThreadPoolBulkheadRegistry threadPollBulkheadRegistry() {
-//    ThreadPoolBulkheadConfig config = ThreadPoolBulkheadConfig.custom()
-//            .maxThreadPoolSize(10)
-//            .coreThreadPoolSize(2)
-//            .queueCapacity(20)
-//            .build();
-//
-//    return BulkheadRegistry.of(config);
-//  }
-
   @PostConstruct
   public void registerEventConsumers() {
     registerCBEventConsumers();
