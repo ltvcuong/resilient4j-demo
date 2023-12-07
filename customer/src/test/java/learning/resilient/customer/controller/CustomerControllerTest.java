@@ -87,13 +87,36 @@ class CustomerControllerTest {
             MockMvcResultMatchers.jsonPath("code", CoreMatchers.is("BulkheadFullException")));
   }
 
-//    @Test
+    @Test
     public void test_timeout() throws Exception {
-        // call slow again -> Bulkhead triggers
+        var cbOpen = 2;
+        for (var i = 0; i < cbOpen; i++) {
+            mockMvc.perform(get("/v1/customers/tech-error"));
+        }
+
+        var bulkhead = 3;
+        for (var i = 0; i < bulkhead; i++) {
+            CompletableFuture.supplyAsync(
+                    () -> {
+                        try {
+                            return mockMvc.perform(get("/v1/customers/slow"));
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        }
+
+        Thread.sleep(6000);
+        // CB now OPEN
+        assertThat(
+                circuitBreakerRegistry.circuitBreaker("order").getState(),
+                CoreMatchers.is(CircuitBreaker.State.OPEN));
+
+        // call slow again -> CB checks first
         mockMvc
                 .perform(get("/v1/customers/slow"))
                 .andExpect(MockMvcResultMatchers.status().is5xxServerError())
                 .andExpect(
-                        MockMvcResultMatchers.jsonPath("code", CoreMatchers.is("TimeoutException")));
+                        MockMvcResultMatchers.jsonPath("code", CoreMatchers.is("CallNotPermittedException")));
     }
 }

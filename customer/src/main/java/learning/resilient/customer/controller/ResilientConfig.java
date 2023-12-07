@@ -59,7 +59,7 @@ public class ResilientConfig {
       EventConsumer<TimeLimiterEvent> timeLimiterEventEventConsumer =
           event -> {
             log.info(
-                "Bulkhead event: time limiter name = {}, event = {}, eventTs = {}",
+                "Time limiter event: time limiter name = {}, event = {}, eventTs = {}",
                 event.getTimeLimiterName(),
                 event.getEventType(),
                 event.getCreationTime());
