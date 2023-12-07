@@ -1,6 +1,7 @@
 package learning.resilient.customer.extservice;
 
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.List;
 import javax.ws.rs.GET;
@@ -8,6 +9,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+@CircuitBreaker(name = OrderServiceClient.SERVICE, fallbackMethod = "cbFallback")
+@Bulkhead(name = OrderServiceClient.SERVICE)
 public interface OrderServiceClient {
   String SERVICE = "order";
 
@@ -25,7 +28,7 @@ public interface OrderServiceClient {
   @Path("/v1/orders/tech-error")
   @Produces(MediaType.APPLICATION_JSON)
   List<Order> technicalError();
-  
+
   @GET
   @Path("/v1/orders/slow")
   @Produces(MediaType.APPLICATION_JSON)
@@ -37,4 +40,10 @@ public interface OrderServiceClient {
   @Path("/v1/orders/slow")
   @Produces(MediaType.APPLICATION_JSON)
   List<Order> resilientSlowWithAnnotation();
+
+  default List<Order> cbFallback(CallNotPermittedException exception) {
+    //    throw new BusinessException(ErrorResponse.builder().code("CB_fallback").build());
+    System.out.println("!!!cbFallback!!!");
+    throw exception;
+  }
 }

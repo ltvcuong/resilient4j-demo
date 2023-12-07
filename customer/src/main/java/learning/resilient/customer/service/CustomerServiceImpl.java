@@ -3,11 +3,9 @@ package learning.resilient.customer.service;
 import io.github.resilience4j.bulkhead.BulkheadRegistry;
 import io.github.resilience4j.bulkhead.ThreadPoolBulkheadRegistry;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import io.github.resilience4j.decorators.Decorators;
 import io.github.resilience4j.timelimiter.TimeLimiterRegistry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
 import java.util.function.Supplier;
 import learning.resilient.customer.extservice.Order;
 import learning.resilient.customer.extservice.OrderServiceClient;
@@ -36,22 +34,22 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public List<Customer> success() {
-    return resilientCallOrderSvc(orderService::success);
+    return getResult(orderService::success);
   }
 
   @Override
   public List<Customer> businessError() {
-    return resilientCallOrderSvc(orderService::businessError);
+    return getResult(orderService::businessError);
   }
 
   @Override
   public List<Customer> technicalError() {
-    return resilientCallOrderSvc(orderService::technicalError);
+    return getResult(orderService::technicalError);
   }
 
   @Override
   public List<Customer> slow() {
-    return resilientCallOrderSvc(orderService::slow);
+    return getResult(orderService::slow);
   }
 
   @Override
@@ -62,18 +60,9 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   // move to aop
-  private List<Customer> resilientCallOrderSvc(Supplier<List<Order>> orderSupplier) {
-    var circuitBreaker = circuitBreakerRegistry.circuitBreaker(OrderServiceClient.SERVICE);
-    var bulkhead = bulkheadRegistry.bulkhead(OrderServiceClient.SERVICE);
-
+  private List<Customer> getResult(Supplier<List<Order>> orderSupplier) {
     List<Customer> customers = new ArrayList<>();
-
-    var ordersSupplier =
-        Decorators.ofSupplier(orderSupplier)
-            .withBulkhead(bulkhead)
-            .withCircuitBreaker(circuitBreaker)
-            .decorate();
-    customers.add(new Customer("1", "John Doe", ordersSupplier.get()));
+    customers.add(new Customer("1", "John Doe", orderSupplier.get()));
     return customers;
   }
 }

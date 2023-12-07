@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.Objects;
 import java.util.concurrent.TimeoutException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -34,7 +35,14 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler({BusinessException.class})
   public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
     var error =
-        ErrorResponse.builder().code("business_exception").description("Some biz error").build();
+        ErrorResponse.builder()
+            .code(
+                (Objects.nonNull(ex.getErrorResponse())
+                        && Objects.nonNull(ex.getErrorResponse().getCode()))
+                    ? ex.getErrorResponse().getCode()
+                    : "business_exception")
+            .description("Some biz error")
+            .build();
     return new ResponseEntity<>(error, HttpStatus.CONFLICT);
   }
 
@@ -62,10 +70,7 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler({TimeoutException.class})
   public ResponseEntity<ErrorResponse> handleBulkheadFullException(TimeoutException ex) {
     var error =
-            ErrorResponse.builder()
-                    .code("TimeoutException")
-                    .description("Some tech error")
-                    .build();
+        ErrorResponse.builder().code("TimeoutException").description("Some tech error").build();
     return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

@@ -1,7 +1,6 @@
 package learning.resilient.customer.controller;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
